@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# PROVIDE: lang302
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name=lang302
+rcvar=lang302_enable
+
+load_rc_config $name
+
+: ${lang302_enable="NO"}
+
+pidfile="/var/run/${name}.pid"
+procname=/usr/local/bin/lang302
+command=/usr/sbin/daemon
+command_args="-f -p ${pidfile} -u lang302 ${procname} --logfile=default"
+
+run_rc_command "$1"
