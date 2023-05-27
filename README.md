@@ -18,9 +18,6 @@ Configuration example for [OpenBSD httpd](https://man.openbsd.org/httpd.8) :
 location "/" {
     fastcgi socket tcp localhost 9000
 }
-location * {
-    root "/website"
-}
 ```
 
 With the default configuration file, this will redirect requests on / to /en or
