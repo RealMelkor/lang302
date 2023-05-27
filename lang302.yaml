@@ -3,5 +3,8 @@ languages:  # list of supported languages
   - "fr"
   - "en"
 remove-region: true # trim region specification, 'fr-CA' becomes 'fr'
-port: 9000 # port to listen on
-address: "localhost" # address to listen on
+network:
+  type: "unix" # network protocol (tcp or unix)
+  port: 9001 # port to listen on
+  address: "localhost" # address to listen on
+  unix: "/run/lang302.sock" # unix socket path

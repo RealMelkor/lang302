@@ -14,8 +14,12 @@ type config struct {
 	Default		string		`fig:"default-language" default:"en"`
 	Languages	[]string	`fig:"languages" default:"[\"en\"]"`
 	RemoveRegion	bool		`fig:"remove-region"`
-	Port		int		`fig:"port" default:"9000"`
-	Address		string		`fig:"address" default:"localhost"`
+	Network		struct {
+		Type	string	`fig:"type" default:"tcp"`
+		Port	int	`fig:"port" default:"9000"`
+		Address	string	`fig:"address" default:"localhost"`
+		Unix	string  `fig:"unix" default:"/run/lang302.sock"`
+	}
 }
 var cfg config
 
@@ -63,12 +67,26 @@ func main() {
 	if err := load(); err != nil {
 		log.Fatalln(err)
 	}
-	l, err := net.Listen("tcp", cfg.Address + ":" + strconv.Itoa(cfg.Port))
-        if err != nil {
-                log.Fatalln(err)
-        }
+	var listener net.Listener
+	if cfg.Network.Type == "tcp" {
+		l, err := net.Listen("tcp", cfg.Network.Address + ":" +
+						strconv.Itoa(cfg.Network.Port))
+		if err != nil {
+			log.Fatalln(err)
+		}
+		listener = l
+	} else if cfg.Network.Type == "unix" {
+		unixAddr, err := net.ResolveUnixAddr("unix", cfg.Network.Unix)
+		l, err := net.ListenUnix("unix", unixAddr)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		listener = l
+	} else {
+		log.Fatalln("invalid network type", cfg.Network.Type)
+	}
 	b := new(FastCGIServer)
-        if err := fcgi.Serve(l, b); err != nil {
+        if err := fcgi.Serve(listener, b); err != nil {
                 log.Fatalln(err)
         }
 }
