@@ -8,6 +8,7 @@ import (
 	"strings"
 	"strconv"
 	"github.com/kkyr/fig"
+	"os"
 )
 
 type config struct {
@@ -69,19 +70,26 @@ func main() {
 	}
 	var listener net.Listener
 	if cfg.Network.Type == "tcp" {
-		l, err := net.Listen("tcp", cfg.Network.Address + ":" +
-						strconv.Itoa(cfg.Network.Port))
+		addr := cfg.Network.Address + ":" +
+					strconv.Itoa(cfg.Network.Port)
+		l, err := net.Listen("tcp", addr)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		listener = l
+		log.Println("Listening on", addr)
 	} else if cfg.Network.Type == "unix" {
+		os.Remove(cfg.Network.Unix)
 		unixAddr, err := net.ResolveUnixAddr("unix", cfg.Network.Unix)
+		if err != nil {
+			log.Fatalln(err)
+		}
 		l, err := net.ListenUnix("unix", unixAddr)
 		if err != nil {
 			log.Fatalln(err)
 		}
 		listener = l
+		log.Println("Listening on unix:" + cfg.Network.Unix)
 	} else {
 		log.Fatalln("invalid network type", cfg.Network.Type)
 	}

@@ -16,6 +16,6 @@ load_rc_config $name
 pidfile="/var/run/${name}.pid"
 procname=/usr/local/bin/lang302
 command=/usr/sbin/daemon
-command_args="-f -p ${pidfile} -u lang302 ${procname} --logfile=default"
+command_args="-f -p ${pidfile} -u www -o /var/log/lang302.log ${procname}"
 
 run_rc_command "$1"
