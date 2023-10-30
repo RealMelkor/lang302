@@ -1,8 +1,19 @@
-default-language: "en" # fallback to this language if no compatible language was found
-languages:  # list of supported languages
-  - "fr"
-  - "en"
-remove-region: true # trim region specification, 'fr-CA' becomes 'fr'
+domains:
+-
+  domain: "example.com"
+  default-language: "en" # fallback to this language
+  languages:  # list of supported languages
+    - "fr"
+    - "en"
+  remove-region: true # trim region specification, 'fr-CA' becomes 'fr'
+-
+  domain: "other.example.com"
+  default-language: "fr"
+  languages:
+    - "de"
+    - "fr"
+    - "en"
+  remove-region: true
 network:
   type: "tcp" # network protocol (tcp or unix)
   port: 9000 # port to listen on

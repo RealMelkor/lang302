@@ -2,6 +2,7 @@
 
 rc_bg="YES"
 daemon="/usr/local/bin/lang302"
+daemon_logger="daemon.info"
 lang302_user="_lang302"
 
 . /etc/rc.d/rc.subr
