@@ -1,0 +1,12 @@
+[Unit]
+Description=Accept-Language redirector
+After=network.target
+
+[Service]
+StandardOutput=journal
+ExecStart=/usr/local/bin/lang302
+User=lang302
+Group=lang302
+
+[Install]
+WantedBy=multi-user.target
